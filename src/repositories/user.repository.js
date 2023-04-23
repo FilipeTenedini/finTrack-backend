@@ -1,8 +1,8 @@
 import { db } from '../config/database.js';
 
-const createUser = (body) => db.collection('').insertOne(body);
+const createUser = (body) => db.collection('users').insertOne(body);
 
-const findByEmail = (body) => db.collection('').findOne(body);
+const findByEmail = (body) => db.collection('users').findOne(body);
 
 export default {
   createUser, findByEmail,
