@@ -5,6 +5,6 @@ const userRoute = Router();
 
 userRoute.post('/signup', userController.register);
 
-// accRoute.post('/signin');
+userRoute.post('/signin', userController.signin);
 
 export default userRoute;
