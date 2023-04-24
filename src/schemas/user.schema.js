@@ -15,6 +15,8 @@ const userSchema = Joi.object({
     .alphanum()
     .min(3)
     .required(),
+  confirmPassword: Joi
+    .ref('password'),
 });
 
 export default userSchema;

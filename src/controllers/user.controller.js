@@ -4,20 +4,28 @@ import userRepository from '../repositories/user.repository.js';
 import accountRepository from '../repositories/account.repository.js';
 
 async function register(req, res) {
-  const { name, email, password } = req.body;
-  const { error, value } = userSchema.validate({ name, email, password }, { abortEarly: false });
+  const {
+    error, value: {
+      name, email, password, confirmPassword,
+    },
+  } = userSchema.validate({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    confirmPassword: req.body.confirmPassword,
+  }, { abortEarly: false });
 
   if (error) return res.status(422).send(error.details.map((detail) => detail.message));
 
   try {
-    const existentUser = await userRepository.findByEmail({ email: value.email });
+    const existentUser = await userRepository.findByEmail({ email });
 
-    if (existentUser) return res.status(409).send({ message: 'E-mail already exists' });
+    if (existentUser) return res.status(409).send({ message: 'E-mail already exists.' });
 
-    const hashPassword = bcrypt.hashSync(value.password, 10);
+    const hashPassword = bcrypt.hashSync(password, 10);
 
     const user = await userRepository.createUser({
-      name: value.name, email: value.email, password: hashPassword,
+      name, email, password: hashPassword,
     });
 
     await accountRepository.createAccount({
