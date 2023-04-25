@@ -35,7 +35,6 @@ async function register(req, res) {
 
     await accountRepository.createAccount({
       userId: user.insertedId,
-      balance: 0,
       movements: [],
     });
   } catch (err) {
@@ -64,7 +63,7 @@ async function signin(req, res) {
 
     await userRepository.updateTokens(validUser._id, token);
 
-    res.status(201).send({ token });
+    res.status(201).send({ name: validUser.name, token });
   } catch (err) {
     console.log(err.message);
   }
