@@ -6,18 +6,7 @@ import accountRepository from '../repositories/account.repository.js';
 import loginSchema from '../schemas/login.schema.js';
 
 async function register(req, res) {
-  const {
-    error, value: {
-      name, email, password,
-    },
-  } = userSchema.validate({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-    confirmPassword: req.body.confirmPassword,
-  }, { abortEarly: false });
-
-  if (error) return res.status(422).send(error.details.map((detail) => detail.message));
+  const { name, email, password } = req.locals;
 
   try {
     const existentUser = await userRepository.findByEmail({ email });
@@ -44,11 +33,7 @@ async function register(req, res) {
 }
 
 async function signin(req, res) {
-  const { error, value: { email, password } } = loginSchema.validate({
-    email: req.body.email, password: req.body.password,
-  });
-
-  if (error) return res.status(422).send({ message: 'Invalid e-mail format.' });
+  const { email, password } = req.locals;
 
   try {
     const validUser = await userRepository.findByEmail({ email });
