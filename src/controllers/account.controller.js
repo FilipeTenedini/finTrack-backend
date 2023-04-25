@@ -3,7 +3,8 @@ import userRepository from '../repositories/user.repository.js';
 import accountMovement from '../schemas/accountMovement.schema.js';
 
 async function newTransaction(req, res) {
-  const { authorization } = req.headers;
+  const { token } = req;
+
   const {
     error, value: {
       opValue, type, desc, data,
@@ -16,12 +17,6 @@ async function newTransaction(req, res) {
   });
 
   if (error) return res.status(422).send({ message: 'Transaction invalid format' });
-
-  if (!authorization) return res.status(401).send({ message: 'Token not sent' });
-
-  const [tokenType, token] = authorization.split(' ');
-
-  if (tokenType !== 'Bearer' || !token) return res.status(401).send({ message: 'Send valid Bearer token' });
 
   try {
     const user = await userRepository.findByToken(token);
@@ -43,13 +38,7 @@ async function newTransaction(req, res) {
 }
 
 async function listMovements(req, res) {
-  const { authorization } = req.headers;
-
-  if (!authorization) return res.status(401).send({ message: 'Token not sent' });
-
-  const [tokenType, token] = authorization.split(' ');
-
-  if (tokenType !== 'Bearer' || !token) return res.status(401).send({ message: 'Send valid Bearer token' });
+  const { token } = req;
 
   try {
     const user = await userRepository.findByToken(token);
