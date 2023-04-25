@@ -5,4 +5,6 @@ const accountRoute = Router();
 
 accountRoute.post('/new_transaction/:type', accountController.newTransaction);
 
+accountRoute.get('/movements', accountController.listMovements);
+
 export default accountRoute;

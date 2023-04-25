@@ -6,6 +6,8 @@ const findUserAccount = (body) => db.collection('accounts').findOne(body);
 
 const updateAccountMovements = (account, value) => db.collection('accounts').updateOne(account, { $push: { movements: value } });
 
+const listAccountMovements = (body) => db.collection('accounts').findOne(body);
+
 export default {
-  createAccount, findUserAccount, updateAccountMovements,
+  createAccount, findUserAccount, updateAccountMovements, listAccountMovements,
 };

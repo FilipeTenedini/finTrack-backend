@@ -42,6 +42,27 @@ async function newTransaction(req, res) {
   }
 }
 
+async function listMovements(req, res) {
+  const { authorization } = req.headers;
+
+  if (!authorization) return res.status(401).send({ message: 'Token not sent' });
+
+  const [tokenType, token] = authorization.split(' ');
+
+  if (tokenType !== 'Bearer' || !token) return res.status(401).send({ message: 'Send valid Bearer token' });
+
+  try {
+    const user = await userRepository.findByToken(token);
+
+    if (!user) return res.status(404).send({ message: 'User not found.' });
+
+    const accountMovements = await accountRepository.findUserAccount({ userId: user._id });
+
+    res.status(200).send(accountMovements.movements);
+  } catch (err) {
+    console.log(err.message);
+  }
+}
 export default {
-  newTransaction,
+  newTransaction, listMovements,
 };

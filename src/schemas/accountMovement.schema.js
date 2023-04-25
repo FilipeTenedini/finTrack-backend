@@ -19,8 +19,5 @@ const accountMovement = Joi.object({
     .pattern(/^\d{2}\/\d{2}\/\d{4},\s\d{2}:\d{2}:\d{2}$/)
     .required(),
 });
-console.log(accountMovement.validate({
-  opValue: 1000, type: 'positive', desc: 'éosgu', data: new Date().toLocaleString(),
-}));
 
 export default accountMovement;
