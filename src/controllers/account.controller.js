@@ -6,12 +6,13 @@ async function newTransaction(req, res) {
   const { authorization } = req.headers;
   const {
     error, value: {
-      opValue, type, desc,
+      opValue, type, desc, data,
     },
   } = accountMovement.validate({
     opValue: req.body.opValue,
     type: req.params.type,
     desc: req.body.desc,
+    data: req.body.data,
   });
 
   if (error) return res.status(422).send({ message: 'Transaction invalid format' });
@@ -31,13 +32,16 @@ async function newTransaction(req, res) {
 
     if (!userAccount) return res.sendStatus(400);
 
-    await accountRepository.updateAccountMovements(userAccount, { type, opValue, desc });
+    await accountRepository.updateAccountMovements(userAccount, {
+      type, opValue, desc, data,
+    });
 
     res.status(200).send('Movement has been made.');
   } catch (err) {
     console.log(err.message);
   }
 }
+
 export default {
   newTransaction,
 };
