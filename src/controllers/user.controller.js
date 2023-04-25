@@ -1,9 +1,7 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
-import userSchema from '../schemas/user.schema.js';
 import userRepository from '../repositories/user.repository.js';
 import accountRepository from '../repositories/account.repository.js';
-import loginSchema from '../schemas/login.schema.js';
 
 async function register(req, res) {
   const { name, email, password } = req.locals;
@@ -12,7 +10,6 @@ async function register(req, res) {
     const existentUser = await userRepository.findByEmail({ email });
 
     if (existentUser) return res.status(409).send({ message: 'E-mail already exists.' });
-
     const hashPassword = bcrypt.hashSync(password, 10);
 
     const user = await userRepository.createUser({
