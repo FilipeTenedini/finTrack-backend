@@ -48,19 +48,9 @@ async function listMovements(req, res) {
 
 async function deleteTransaction(req, res) {
   const {
-    error, value: {
-      opValue, type, desc, data,
-    },
-  } = accountMovement.validate({
-    opValue: req.body.opValue,
-    type: req.body.type,
-    desc: req.body.desc,
-    data: req.body.data,
-  });
+    opValue, type, desc, data,
+  } = req.locals;
 
-  if (error) {
-    return res.status(422).send({ message: error.details.map((detail) => detail.message) });
-  }
   try {
     const acc = await accountRepository.findUserAccount({ userId: req.user._id });
 
@@ -68,7 +58,9 @@ async function deleteTransaction(req, res) {
       type, opValue, desc, data,
     });
 
-    if (modifiedCount) return res.status(202).send('Deleted');
+    if (!modifiedCount) return res.status(400).send({ message: 'Item Not deleted or not found' });
+
+    return res.status(202).send('Deleted');
   } catch (err) {
     console.log(err.message);
   }
