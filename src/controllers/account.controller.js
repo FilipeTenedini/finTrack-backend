@@ -86,10 +86,9 @@ async function updateTransaction(req, res) {
   }
 
   try {
-    const t = await accountRepository.updateMovement(user._id, {
+    await accountRepository.updateMovement(user._id, {
       type, opValue, desc, data,
     }, newValue, newDesc);
-    console.log(t);
     res.status(200).send('Movement has been made.');
   } catch (err) {
     console.log(err.message);
