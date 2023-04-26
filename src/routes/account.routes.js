@@ -8,4 +8,6 @@ accountRoute.post('/new_transaction/:type', validToken, accountController.newTra
 
 accountRoute.get('/movements', validToken, accountController.listMovements);
 
+accountRoute.delete('/delete_transaction', validToken, accountController.deleteTransaction);
+
 export default accountRoute;

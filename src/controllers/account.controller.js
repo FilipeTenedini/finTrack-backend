@@ -15,7 +15,9 @@ async function newTransaction(req, res) {
     data: req.body.data,
   });
 
-  if (error) return res.status(422).send({ message: 'Transaction invalid format' });
+  if (error) {
+    return res.status(422).send({ message: error.details.map((detail) => detail.message) });
+  }
 
   try {
     const userAccount = await accountRepository.findUserAccount({ userId: user._id });
@@ -43,6 +45,34 @@ async function listMovements(req, res) {
     console.log(err.message);
   }
 }
+
+async function deleteTransaction(req, res) {
+  const {
+    error, value: {
+      opValue, type, desc, data,
+    },
+  } = accountMovement.validate({
+    opValue: req.body.opValue,
+    type: req.body.type,
+    desc: req.body.desc,
+    data: req.body.data,
+  });
+
+  if (error) {
+    return res.status(422).send({ message: error.details.map((detail) => detail.message) });
+  }
+  try {
+    const acc = await accountRepository.findUserAccount({ userId: req.user._id });
+
+    const { modifiedCount } = await accountRepository.deleteMovement({ _id: acc._id }, {
+      type, opValue, desc, data,
+    });
+
+    if (modifiedCount) return res.status(202).send('Deleted');
+  } catch (err) {
+    console.log(err.message);
+  }
+}
 export default {
-  newTransaction, listMovements,
+  newTransaction, listMovements, deleteTransaction,
 };
