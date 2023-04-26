@@ -65,6 +65,36 @@ async function deleteTransaction(req, res) {
     console.log(err.message);
   }
 }
+
+async function updateTransaction(req, res) {
+  const { user } = req;
+
+  const {
+    error, value: {
+      opValue, type, desc, data, newValue, newDesc,
+    },
+  } = accountMovement.validate({
+    opValue: req.body.opValue,
+    type: req.body.type,
+    desc: req.body.desc,
+    data: req.body.data,
+    newValue: req.body.newValue,
+    newDesc: req.body.newDesc,
+  });
+  if (error) {
+    return res.status(422).send({ message: error.details.map((detail) => detail.message) });
+  }
+  console.log(newDesc);
+  try {
+    const t = await accountRepository.updateMovement(user._id, {
+      type, opValue, desc, data,
+    }, newValue, newDesc);
+    console.log(t);
+    res.status(200).send('Movement has been made.');
+  } catch (err) {
+    console.log(err.message);
+  }
+}
 export default {
-  newTransaction, listMovements, deleteTransaction,
+  newTransaction, listMovements, deleteTransaction, updateTransaction,
 };

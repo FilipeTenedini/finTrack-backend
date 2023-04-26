@@ -10,6 +10,16 @@ const listAccountMovements = (body) => db.collection('accounts').findOne(body);
 
 const deleteMovement = (idBody, delBody) => db.collection('accounts').updateOne(idBody, { $pull: { movements: delBody } });
 
+const updateMovement = (id, body, newValue, newDesc) => db.collection('accounts').updateOne(
+  { userId: id, movements: { $elemMatch: body } },
+  { $set: { 'movements.$.opValue': newValue, 'movements.$.desc': newDesc } },
+);
+
 export default {
-  createAccount, findUserAccount, updateAccountMovements, listAccountMovements, deleteMovement,
+  createAccount,
+  findUserAccount,
+  updateAccountMovements,
+  listAccountMovements,
+  deleteMovement,
+  updateMovement,
 };

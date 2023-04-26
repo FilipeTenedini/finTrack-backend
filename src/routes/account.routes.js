@@ -12,4 +12,6 @@ accountRoute.get('/movements', validToken, accountController.listMovements);
 
 accountRoute.delete('/delete_transaction', validToken, validSchemas(accountMovement), accountController.deleteTransaction);
 
+accountRoute.put('/update_transaction', validToken, accountController.updateTransaction);
+
 export default accountRoute;

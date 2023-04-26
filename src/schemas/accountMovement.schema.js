@@ -18,6 +18,10 @@ const accountMovement = Joi.object({
     .string()
     .pattern(/^\d{2}\/\d{2}\/\d{4}\s\d{2}:\d{2}:\d{2}$/)
     .required(),
+  newDesc: Joi
+    .string(),
+  newValue: Joi
+    .number(),
 });
 
 export default accountMovement;
