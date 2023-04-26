@@ -84,7 +84,7 @@ async function updateTransaction(req, res) {
   if (error) {
     return res.status(422).send({ message: error.details.map((detail) => detail.message) });
   }
-  console.log(newDesc);
+
   try {
     const t = await accountRepository.updateMovement(user._id, {
       type, opValue, desc, data,
@@ -95,6 +95,7 @@ async function updateTransaction(req, res) {
     console.log(err.message);
   }
 }
+
 export default {
   newTransaction, listMovements, deleteTransaction, updateTransaction,
 };
