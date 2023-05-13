@@ -8,4 +8,6 @@ router.use('/user', userRoute);
 
 router.use('/account', accountRoute);
 
+router.get('/keep-alive', (_req, res) => res.sendStatus(200));
+
 export default router;
