@@ -24,11 +24,3 @@ function startKeepAlive() {
 }
 
 export default startKeepAlive;
-
-(async () => {
-  try {
-    await axios.get(KEEPALIVE_URL);
-  } catch (error) {
-    console.log(`Error sending keep-alive request to ${KEEPALIVE_URL}:`, error);
-  }
-})();
